@@ -8,33 +8,49 @@ import "../node_modules/@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./Oraclize.sol";
 
 contract Ownable {
-    //  TODO's
-    //  1) create a private '_owner' variable of type address with a public getter function
-    //  2) create an internal constructor that sets the _owner var to the creater of the contract
-    //  3) create an 'onlyOwner' modifier that throws if called by any account other than the owner.
-    //  4) fill out the transferOwnership function
-    //  5) create an event that emits anytime ownerShip is transfered (including in the constructor)
+    address private _owner;
+
+    event OwnerChanged(address newOwner);
+
+    constructor() public {
+        _owner = msg.sender;
+        emit OwnerChanged(_owner);
+    }
+
     modifier onlyOwner() {
-        // TODO: Implement;
+        require(msg.sender == _owner, "Caller is not contract owner");
         _;
     }
 
     function transferOwnership(address newOwner) public onlyOwner {
-        // TODO add functionality to transfer control of the contract to a newOwner.
-        // make sure the new owner is a real address
+        require(newOwner != 0x0);
+        _owner = newOwner;
 
+        emit OwnerChanged(_owner);
     }
 }
 
-//  TODO's: Create a Pausable contract that inherits from the Ownable contract
-//  1) create a private '_paused' variable of type bool
-//  2) create a public setter using the inherited onlyOwner modifier
-//  3) create an internal constructor that sets the _paused variable to false
-//  4) create 'whenNotPaused' & 'paused' modifier that throws in the appropriate situation
-//  5) create a Paused & Unpaused event that emits the address that triggered the event
 contract Pausable is Ownable {
+    bool private _paused;
+
+    event Paused();
+    event UnPaused();
+
+    constructor() Ownable() {
+        _paused = false;
+    }
+
+    function setPaused(bool newPaused) onlyOwner {
+        _paused = newPaused;
+        if (newPaused) {
+            emit Paused();
+        } else {
+            emit UnPaused();
+        }
+    }
+
     modifier whenNotPaused() {
-        _;
+        require(!_paused, "Contract is paused");
     }
 
 }
@@ -114,12 +130,11 @@ abstract contract ERC721 is Pausable, ERC165 {
     }
 
     function balanceOf(address owner) public view returns (uint256) {
-        // TODO return the token balance of given address
-        // TIP: remember the functions to use for Counters. you can refresh yourself with the link above
+        return _ownedTokensCount[owner].current;
     }
 
     function ownerOf(uint256 tokenId) public view returns (address) {
-        // TODO return the owner of the given tokenId
+        return _tokenOwner[tokenId];
     }
 
     //    @dev Approves another address to transfer the given token ID
