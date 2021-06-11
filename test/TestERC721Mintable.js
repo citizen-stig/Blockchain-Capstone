@@ -1,4 +1,4 @@
-const ERC721MintableComplete = artifacts.require('ERC721MintableComplete');
+const ERC721MintableComplete = artifacts.require('CustomERC721Token');
 
 contract('TestERC721Mintable', accounts => {
 
