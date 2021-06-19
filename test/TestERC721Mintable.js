@@ -5,35 +5,46 @@ contract('TestERC721Mintable', accounts => {
     const name = "Test Token";
     const symbol = "TTK";
     const baseUri = "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/"
-    const account_one = accounts[0];
-    const account_two = accounts[1];
+    const accountOne = accounts[0];
+    const accountTwo = accounts[1];
+    const accountThree = accounts[2];
+    console.log({
+        accountOne, accountTwo, accountThree
+    })
 
     let contract;
 
     beforeEach(async function() {
-        contract = await ERC721MintableComplete.new(name, symbol, {from: account_one});
-
+        contract = await ERC721MintableComplete.new(name, symbol, {from: accountOne});
     })
 
     describe('match erc721 spec', function () {
+        const tokenIdOne = 111;
+        const tokenIdTwo = 222;
         beforeEach(async function () {
-            // console.log("________");
-            // this.contract = await ERC721MintableComplete.new(name, symbol, {from: account_one});
-            let res = await contract.mint(account_two, 123, {from: account_one});
-            // TODO: mint multiple tokens
+            // TODO: Check if it is minted
+            let minted = await Promise.all([
+                contract.mint(accountTwo, tokenIdOne, {from: accountOne}),
+                contract.mint(accountThree, tokenIdTwo, {from: accountOne}),
+            ]);
         })
 
         it('should return total supply', async function () {
-
+            const totalSupply = await contract.totalSupply.call();
+            assert.equal(2, totalSupply);
         })
 
-        it('should get token balance', async function () {
-
+        it('should get account balance', async function () {
+            const balanceOfAccountOne = await contract.balanceOf(accountTwo);
+            assert.equal(1, balanceOfAccountOne);
+            const balanceOfAccountFour = await contract.balanceOf(accountOne);
+            assert.equal(0, balanceOfAccountFour);
         })
 
         // token uri should be complete i.e: https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/1
         it('should return token uri', async function () {
-
+            let tokenOneUri = await contract.tokenURI.call(tokenIdOne);
+            assert.equal(baseUri + tokenIdOne, tokenOneUri);
         })
 
         it('should transfer token from one owner to another', async function () {

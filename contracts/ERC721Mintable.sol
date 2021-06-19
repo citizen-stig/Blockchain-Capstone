@@ -256,7 +256,7 @@ abstract contract ERC721 is Pausable, ERC165 {
     // @dev Internal function to mint a new token
     // TIP: remember the functions to use for Counters. you can refresh yourself with the link above
     function _mint(address to, uint256 tokenId) internal {
-        require(_tokenOwner[tokenId] != address(0), "Token already exist");
+        require(_tokenOwner[tokenId] == address(0), "Token already exist");
         require(to != address(0), "Cannot mint token to this address");
 
         _tokenOwner[tokenId] = to;
@@ -595,6 +595,8 @@ contract CustomERC721Token is ERC721Metadata {
     ) ERC721Metadata(name, symbol, "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/") {}
 
     function mint(address to, uint256 tokenId) public onlyOwner returns (bool){
-        return false;
+        super._mintEnumerable(to, tokenId);
+        super._setTokenURI(tokenId);
+        return true;
     }
 }
