@@ -79,9 +79,9 @@ abstract contract ERC165 {
      * @dev implement supportsInterface(bytes4) using a lookup table
      */
     function supportsInterface(bytes4 interfaceId)
-        external
-        view
-        returns (bool)
+    external
+    view
+    returns (bool)
     {
         return _supportedInterfaces[interfaceId];
     }
@@ -158,7 +158,7 @@ abstract contract ERC721 is Pausable, ERC165 {
         require(to != tokenOwner, "cannot approve own token");
         require(
             msg.sender == tokenOwner ||
-                isApprovedForAll(tokenOwner, msg.sender),
+            isApprovedForAll(tokenOwner, msg.sender),
             "cannot approve other token"
         );
 
@@ -190,9 +190,9 @@ abstract contract ERC721 is Pausable, ERC165 {
      * @return bool - whether the given operator is approved by the given owner
      */
     function isApprovedForAll(address owner, address operator)
-        public
-        view
-        returns (bool)
+    public
+    view
+    returns (bool)
     {
         return _operatorApprovals[owner][operator];
     }
@@ -243,14 +243,14 @@ abstract contract ERC721 is Pausable, ERC165 {
      * is an operator of the owner, or is the owner of the token
      */
     function _isApprovedOrOwner(address spender, uint256 tokenId)
-        internal
-        view
-        returns (bool)
+    internal
+    view
+    returns (bool)
     {
         address owner = ownerOf(tokenId);
         return (spender == owner ||
-            getApproved(tokenId) == spender ||
-            isApprovedForAll(owner, spender));
+        getApproved(tokenId) == spender ||
+        isApprovedForAll(owner, spender));
     }
 
     // @dev Internal function to mint a new token
@@ -307,12 +307,12 @@ abstract contract ERC721 is Pausable, ERC165 {
         }
 
         bytes4 retval =
-            IERC721Receiver(to).onERC721Received(
-                msg.sender,
-                from,
-                tokenId,
-                _data
-            );
+        IERC721Receiver(to).onERC721Received(
+            msg.sender,
+            from,
+            tokenId,
+            _data
+        );
         return (retval == _ERC721_RECEIVED);
     }
 
@@ -361,9 +361,9 @@ contract ERC721Enumerable is ERC165, ERC721 {
      * @return uint256 token ID at the given index of the tokens list owned by the requested address
      */
     function tokenOfOwnerByIndex(address owner, uint256 index)
-        public
-        view
-        returns (uint256)
+    public
+    view
+    returns (uint256)
     {
         require(index < balanceOf(owner));
         return _ownedTokens[owner][index];
@@ -427,9 +427,9 @@ contract ERC721Enumerable is ERC165, ERC721 {
      * @return uint256[] List of token IDs owned by the requested address
      */
     function _tokensOfOwner(address owner)
-        internal
-        view
-        returns (uint256[] storage)
+    internal
+    view
+    returns (uint256[] storage)
     {
         return _ownedTokens[owner];
     }
@@ -462,7 +462,7 @@ contract ERC721Enumerable is ERC165, ERC721 {
      * @param tokenId uint256 ID of the token to be removed from the tokens list of the given address
      */
     function _removeTokenFromOwnerEnumeration(address from, uint256 tokenId)
-        private
+    private
     {
         // To prevent a gap in from's tokens array, we store the last token in the index of the token to delete, and
         // then delete the last slot (swap and pop).
@@ -543,21 +543,21 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
         _registerInterface(_INTERFACE_ID_ERC721_METADATA);
     }
 
-//    function name() external view returns (string memory) {
-//        return _name;
-//    }
-//
-//    function setName(string memory name) public onlyOwner {
-//        _name = name;
-//    }
-//
-//    function symbol() external view returns (string memory) {
-//        return _symbol;
-//    }
-//
-//    function setSymbol(string memory symbol) public onlyOwner {
-//        _symbol = symbol;
-//    }
+    //    function name() external view returns (string memory) {
+    //        return _name;
+    //    }
+    //
+    //    function setName(string memory name) public onlyOwner {
+    //        _name = name;
+    //    }
+    //
+    //    function symbol() external view returns (string memory) {
+    //        return _symbol;
+    //    }
+    //
+    //    function setSymbol(string memory symbol) public onlyOwner {
+    //        _symbol = symbol;
+    //    }
 
     function tokenURI(uint256 tokenId) external view returns (string memory) {
         require(_exists(tokenId));
@@ -591,7 +591,10 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 contract CustomERC721Token is ERC721Metadata {
     constructor(
         string memory name,
-        string memory symbol,
-        string memory baseTokenURI
-    ) ERC721Metadata(name, symbol, baseTokenURI) {}
+        string memory symbol
+    ) ERC721Metadata(name, symbol, "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/") {}
+
+    function mint(address to, uint256 tokenId) public onlyOwner returns (bool){
+        return false;
+    }
 }
