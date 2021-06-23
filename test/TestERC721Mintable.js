@@ -8,9 +8,10 @@ contract('TestERC721Mintable', accounts => {
     const accountOne = accounts[0];
     const accountTwo = accounts[1];
     const accountThree = accounts[2];
-    console.log({
-        accountOne, accountTwo, accountThree
-    })
+    const accountFour = accounts[3];
+    // console.log({
+    //     accountOne, accountTwo, accountThree, accountFour
+    // })
 
     let contract;
 
@@ -35,9 +36,11 @@ contract('TestERC721Mintable', accounts => {
         })
 
         it('should get account balance', async function () {
-            const balanceOfAccountOne = await contract.balanceOf(accountTwo);
-            assert.equal(1, balanceOfAccountOne);
-            const balanceOfAccountFour = await contract.balanceOf(accountOne);
+            const balanceOfAccountOne = await contract.balanceOf(accountOne);
+            assert.equal(0, balanceOfAccountOne);
+            const balanceOfAccountTwo = await contract.balanceOf(accountTwo);
+            assert.equal(1, balanceOfAccountTwo);
+            const balanceOfAccountFour = await contract.balanceOf(accountFour);
             assert.equal(0, balanceOfAccountFour);
         })
 
@@ -48,6 +51,10 @@ contract('TestERC721Mintable', accounts => {
         })
 
         it('should transfer token from one owner to another', async function () {
+            await contract.approve(accountFour, tokenIdOne, {from: accountTwo});
+            await contract.safeTransferFrom(accountTwo, accountFour, tokenIdOne, {from: accountFour});
+            let ownerOfTokenIdOne = await contract.ownerOf.call(tokenIdOne);
+            assert.equal(accountFour, ownerOfTokenIdOne);
 
         })
     });
