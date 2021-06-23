@@ -28,7 +28,12 @@ contract('TestERC721Mintable', accounts => {
                 contract.mint(accountTwo, tokenIdOne, {from: accountOne}),
                 contract.mint(accountThree, tokenIdTwo, {from: accountOne}),
             ]);
-            // console.log(minted.map(x => x.logs));
+            minted.forEach(result => {
+                const logs = result.logs;
+                assert.equal(1, logs.length);
+                const log = logs[0];
+                assert.equal('Transfer', log.event);
+            });
         })
 
         it('should return total supply', async function () {
