@@ -15,7 +15,7 @@ contract('TestERC721Mintable', accounts => {
 
     let contract;
 
-    beforeEach(async function() {
+    beforeEach(async function () {
         contract = await ERC721MintableComplete.new(name, symbol, {from: accountOne});
     })
 
@@ -28,6 +28,7 @@ contract('TestERC721Mintable', accounts => {
                 contract.mint(accountTwo, tokenIdOne, {from: accountOne}),
                 contract.mint(accountThree, tokenIdTwo, {from: accountOne}),
             ]);
+            // console.log(minted.map(x => x.logs));
         })
 
         it('should return total supply', async function () {
@@ -60,17 +61,13 @@ contract('TestERC721Mintable', accounts => {
     });
 
     describe('have ownership properties', function () {
-        // beforeEach(async function () {
-        //     this.;
-        // })
-
         it('should fail when minting when address is not contract owner', async function () {
-
+            try {
+                await contract.mint(accountTwo, 444, {from: accountThree});
+                assert.fail("Should not allow to mint by non owner");
+            } catch (error) {
+                assert.equal("Caller is not contract owner", error.reason);
+            }
         })
-
-        it('should return contract owner', async function () {
-
-        })
-
     });
 })
