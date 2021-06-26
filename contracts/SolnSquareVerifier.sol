@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >= 0.8.4;
 
+import "./Verifier.sol";
+
 // TODO define a contract call to the zokrates generated solidity contract <Verifier> or <renamedVerifier>
 contract SquareVerifier {
 
