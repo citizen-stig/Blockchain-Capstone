@@ -1,6 +1,6 @@
 const ERC721MintableComplete = artifacts.require('CustomERC721Token');
 
-contract('TestERC721Mintable', accounts => {
+contract('Test ERC721Mintable', accounts => {
 
     const name = "Test Token";
     const symbol = "TTK";
@@ -23,7 +23,6 @@ contract('TestERC721Mintable', accounts => {
         const tokenIdOne = 111;
         const tokenIdTwo = 222;
         beforeEach(async function () {
-            // TODO: Check if it is minted
             let minted = await Promise.all([
                 contract.mint(accountTwo, tokenIdOne, {from: accountOne}),
                 contract.mint(accountThree, tokenIdTwo, {from: accountOne}),
