@@ -15,7 +15,7 @@ contract("Test SolnSquareVerifier", accounts => {
     let squareVerifierContract;
     let solnSquareVerifier;
 
-    beforeEach(async function () {
+    before(async function () {
         squareVerifierContract = await SquareVerifier.new({from: owner});
         solnSquareVerifier = await SolnSquareVerifier.new(squareVerifierContract.address, {from: owner});
     });
@@ -35,8 +35,28 @@ contract("Test SolnSquareVerifier", accounts => {
             assert.equal(accountOne, ownerOfTokenIdOne)
         });
 
-        it('should fail with duplicate solution');
-        it('should fail with wrong solution');
+        it('should fail with duplicate solution', async function () {
+            try {
+                await solnSquareVerifier.mint(accountTwo, 2, proof_one.proof.a,
+                    proof_one.proof.b,
+                    proof_one.proof.c,
+                    proof_one.inputs);
+                assert.fail("Should not allow to mint using double solution");
+            } catch (error) {
+                assert.equal("Solution was used already used", error.reason);
+            }
+        });
+        it('should fail with wrong solution', async function () {
+            try {
+                await solnSquareVerifier.mint(accountTwo, 3, proof_one.proof.a,
+                    proof_one.proof.b,
+                    proof_one.proof.c,
+                    proof_two.inputs);
+                assert.fail("Should not allow to mint using wrong proof");
+            } catch (error) {
+                assert.equal("Proof is invalid", error.reason);
+            }
+        });
     });
 
 });

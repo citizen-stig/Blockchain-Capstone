@@ -12,24 +12,21 @@ contract SquareVerifier is Verifier {
         uint256[2] memory c,
         uint256[2] memory input
     ) public view returns (bool) {
-        return true;
-        // return super().verifyTx(a, b, c, input);
+        return super.verifyTx(a, b, c, input);
     }
 }
 
 contract SolnSquareVerifier is CustomERC721Token {
-    Verifier private squareVerifier;
+    SquareVerifier private squareVerifier;
 
     mapping(bytes32 => bool) private unique_solutions;
 
     event SolutionAdded(bytes32 hash, address prover);
 
-    constructor(
-//        string memory name,
-//        string memory symbol,
-        address payable verifierAddress
-    ) CustomERC721Token("Golub Blockchain Capstone Project", "GBPC") {
-        squareVerifier = Verifier(verifierAddress);
+    constructor(address payable verifierAddress)
+        CustomERC721Token("Golub Blockchain Capstone Project", "GBPC")
+    {
+        squareVerifier = SquareVerifier(verifierAddress);
     }
 
     function addSolution(
@@ -53,16 +50,15 @@ contract SolnSquareVerifier is CustomERC721Token {
         uint256[2][2] memory b,
         uint256[2] memory c,
         uint256[2] memory input
-    ) public returns (bool) {
+    ) public {
         require(
             !unique_solutions[getSolutionHash(a, b, c, input)],
             "Solution was used already used"
         );
-        if (squareVerifier.verifyTx(a, b, c, input)) {
-            addSolution(a, b, c, input);
-            return super.mint(to, tokenId);
-        }
-        return false;
+        require(squareVerifier.verify(a, b, c, input), "Proof is invalid");
+        addSolution(a, b, c, input);
+        super._mintEnumerable(to, tokenId);
+        super._setTokenURI(tokenId);
     }
 
     function getSolutionHash(
