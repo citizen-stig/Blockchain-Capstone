@@ -1,6 +1,19 @@
 # Udacity Blockchain Capstone
 
-The capstone will build upon the knowledge you have gained in the course in order to build a decentralized housing product. 
+The capstone project is build a decentralized housing product. i
+
+## How to run
+
+TODO: make commands
+
+
+## Addresses
+
+ * Contract Addresses
+ * Contract Abi's
+ * OpenSea MarketPlace Storefront links
+
+
 
 # Project Resources
 

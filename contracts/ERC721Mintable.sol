@@ -582,7 +582,7 @@ contract CustomERC721Token is ERC721Metadata {
         string memory symbol
     ) ERC721Metadata(name, symbol, "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/") {}
 
-    function mint(address to, uint256 tokenId) public onlyOwner returns (bool){
+    function mint(address to, uint256 tokenId) public onlyOwner returns (bool) {
         super._mintEnumerable(to, tokenId);
         super._setTokenURI(tokenId);
         return true;
