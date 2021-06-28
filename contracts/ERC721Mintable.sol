@@ -543,21 +543,13 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
         _registerInterface(_INTERFACE_ID_ERC721_METADATA);
     }
 
-    //    function name() external view returns (string memory) {
-    //        return _name;
-    //    }
-    //
-    //    function setName(string memory name) public onlyOwner {
-    //        _name = name;
-    //    }
-    //
-    //    function symbol() external view returns (string memory) {
-    //        return _symbol;
-    //    }
-    //
-    //    function setSymbol(string memory symbol) public onlyOwner {
-    //        _symbol = symbol;
-    //    }
+    function name() external view returns (string memory) {
+        return _name;
+    }
+
+    function symbol() external view returns (string memory) {
+        return _symbol;
+    }
 
     function tokenURI(uint256 tokenId) external view returns (string memory) {
         require(_exists(tokenId));
@@ -582,7 +574,7 @@ contract CustomERC721Token is ERC721Metadata {
         string memory symbol
     ) ERC721Metadata(name, symbol, "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/") {}
 
-    function mint(address to, uint256 tokenId) public onlyOwner returns (bool) {
+    function mint(address to, uint256 tokenId) public onlyOwner whenNotPaused returns (bool) {
         super._mintEnumerable(to, tokenId);
         super._setTokenURI(tokenId);
         return true;

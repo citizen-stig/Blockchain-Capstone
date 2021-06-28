@@ -145,3 +145,5 @@ Temporary Items
 .apdisk
 
 .idea/
+.secret
+build/

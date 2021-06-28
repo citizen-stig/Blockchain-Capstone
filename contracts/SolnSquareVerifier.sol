@@ -16,6 +16,11 @@ contract SquareVerifier is Verifier {
     }
 }
 
+
+/**
+ * @title Golub Blockchain Nano Degree Capstone
+ * Contract for minting tokens based on Zero Knowledge Proofs
+ */
 contract SolnSquareVerifier is CustomERC721Token {
     SquareVerifier private squareVerifier;
 
@@ -50,7 +55,7 @@ contract SolnSquareVerifier is CustomERC721Token {
         uint256[2][2] memory b,
         uint256[2] memory c,
         uint256[2] memory input
-    ) public {
+    ) public returns(bool)  {
         require(
             !unique_solutions[getSolutionHash(a, b, c, input)],
             "Solution was used already used"
@@ -59,6 +64,7 @@ contract SolnSquareVerifier is CustomERC721Token {
         addSolution(a, b, c, input);
         super._mintEnumerable(to, tokenId);
         super._setTokenURI(tokenId);
+        return true;
     }
 
     function getSolutionHash(
