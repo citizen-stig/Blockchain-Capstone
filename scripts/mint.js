@@ -6,7 +6,7 @@ const fs = require('fs');
 const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 const CONTRACT_DATA = require("../build/contracts/SolnSquareVerifier.json");
-const CONTRACT_ADDRESS = "0x6ac3a159460Fc1FF41724d3283768077CD963add"
+const CONTRACT_ADDRESS = "0x7C3F14509531897A76069EAC5Ce1182Aa054e9d2"
 
 async function main() {
     console.log("Start minting...");
@@ -26,10 +26,8 @@ async function main() {
     console.log("Checking total supply")
     const totalSupply = await contract.methods
         .totalSupply()
-        .call({from: thisAddress });
+        .call({from: thisAddress});
     console.log(`Total supply before: ${totalSupply}`);
-
-
 
     const args = process.argv.slice(2);
     console.log("To mint with these proofs:")
@@ -49,7 +47,7 @@ async function main() {
                 proofData.proof.c,
                 proofData.inputs
             )
-            .send({from: thisAddress });
+            .send({from: thisAddress});
         console.log(response);
         tokenId += 1;
     }
