@@ -17,6 +17,10 @@ contract Ownable {
         emit OwnerChanged(_owner);
     }
 
+    function owner() public view virtual returns (address) {
+        return _owner;
+    }
+
     modifier onlyOwner() {
         require(msg.sender == _owner, "Caller is not contract owner");
         _;
